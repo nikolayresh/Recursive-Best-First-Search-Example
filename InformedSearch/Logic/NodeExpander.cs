@@ -3,7 +3,7 @@
 namespace InformedSearch.Logic
 {
     /// <summary>
-    /// Class that expands nodes
+    /// Class that expands a node by adding child nodes to it
     /// </summary>
     public static class NodeExpander
     {
@@ -28,7 +28,9 @@ namespace InformedSearch.Logic
 
             if (!state.SmallBucket.IsEmpty())
             {
-                ProblemState ps;
+                ProblemState ps = new ProblemState(node.State);
+                ps.SmallBucket.Dump();
+                successors.Add(new Node(ps, node));
 
                 if (!state.BigBucket.IsFull())
                 {
@@ -36,15 +38,13 @@ namespace InformedSearch.Logic
                     ps.SmallBucket.PourWaterInto(ps.BigBucket);
                     successors.Add(new Node(ps, node));
                 }
-
-                ps = new ProblemState(node.State);
-                ps.SmallBucket.Dump();
-                successors.Add(new Node(ps, node));
             }
 
             if (!state.BigBucket.IsEmpty())
             {
-                ProblemState ps;
+                ProblemState ps = new ProblemState(node.State);
+                ps.BigBucket.Dump();
+                successors.Add(new Node(ps, node));
 
                 if (!state.SmallBucket.IsFull())
                 {
@@ -52,16 +52,21 @@ namespace InformedSearch.Logic
                     ps.BigBucket.PourWaterInto(ps.SmallBucket);
                     successors.Add(new Node(ps, node));
                 }
-
-                ps = new ProblemState(node.State);
-                ps.BigBucket.Dump();
-                successors.Add(new Node(ps, node));
             }
 
             HashSet<Node> parentNodes = node.GetParentNodes();
-            successors.RemoveWhere(n => parentNodes.Contains(n));
+            successors.RemoveWhere(n => parentNodes.Contains(n) || Equals(n, GetExcludedNode(state)));
 
             return successors;
+        }
+
+        private static Node GetExcludedNode(ProblemState state)
+        {
+            ProblemState ps = new ProblemState(state);
+            ps.SmallBucket.FillUp();
+            ps.BigBucket.FillUp();
+
+            return new Node(ps);
         }
     }
 }

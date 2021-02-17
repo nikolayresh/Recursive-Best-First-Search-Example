@@ -1,7 +1,7 @@
 ﻿namespace InformedSearch.Logic
 {
     /// <summary>
-    /// State of the problem
+    /// A single state of a problem
     /// </summary>
     public sealed class ProblemState
     {

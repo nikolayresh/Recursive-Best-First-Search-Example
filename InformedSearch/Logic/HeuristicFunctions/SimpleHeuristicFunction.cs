@@ -18,7 +18,13 @@ namespace InformedSearch.Logic.HeuristicFunctions
             int volumeGoal = _problem.GetGoalVolume();
 
             int result = 0;
-            if (volumeSmall != volumeGoal && volumeBig != volumeGoal)
+
+            if (volumeSmall != volumeGoal)
+            {
+                result++;
+            }
+
+            if (volumeBig != volumeGoal)
             {
                 result++;
             }
