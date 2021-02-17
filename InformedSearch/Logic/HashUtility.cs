@@ -12,13 +12,13 @@
         {
             unchecked
             {
-                var hash = SeedPrime;
+                int hash = SeedPrime;
 
                 if (items != null && items.Length > 0)
                 {
-                    for (var i = 0; i < items.Length; i++)
+                    for (int i = 0; i < items.Length; i++)
                     {
-                        var item = items[i];
+                        object item = items[i];
                         hash = hash * NextPrime + (item?.GetHashCode() ?? 0);
                     }
                 }

@@ -2,23 +2,26 @@
 
 namespace InformedSearch.Logic
 {
+    /// <summary>
+    /// Class that expands nodes
+    /// </summary>
     public static class NodeExpander
     {
         public static HashSet<Node> Expand(Node node)
         {
-            var successors = new HashSet<Node>();
-            var state = node.State;
+            HashSet<Node> successors = new HashSet<Node>();
+            ProblemState state = node.State;
 
             if (state.SmallBucket.IsEmpty())
             {
-                var ps = new ProblemState(node.State);
+                ProblemState ps = new ProblemState(node.State);
                 ps.SmallBucket.FillUp();
                 successors.Add(new Node(ps, node));
             }
 
             if (state.BigBucket.IsEmpty())
             {
-                var ps = new ProblemState(node.State);
+                ProblemState ps = new ProblemState(node.State);
                 ps.BigBucket.FillUp();
                 successors.Add(new Node(ps, node));
             }
@@ -35,7 +38,7 @@ namespace InformedSearch.Logic
                 }
 
                 ps = new ProblemState(node.State);
-                ps.SmallBucket.DumpWater();
+                ps.SmallBucket.Dump();
                 successors.Add(new Node(ps, node));
             }
 
@@ -51,12 +54,12 @@ namespace InformedSearch.Logic
                 }
 
                 ps = new ProblemState(node.State);
-                ps.BigBucket.DumpWater();
+                ps.BigBucket.Dump();
                 successors.Add(new Node(ps, node));
             }
 
-            var parentNodes = node.GetParentNodes();
-            successors.RemoveWhere(s => parentNodes.Contains(s));
+            HashSet<Node> parentNodes = node.GetParentNodes();
+            successors.RemoveWhere(n => parentNodes.Contains(n));
 
             return successors;
         }

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace InformedSearch.Logic
 {
+    /// <summary>
+    /// Node of a problem state
+    /// </summary>
     public sealed class Node
     {
         public Node(ProblemState state, Node parent)
@@ -55,8 +58,8 @@ namespace InformedSearch.Logic
         /// </summary>
         public HashSet<Node> GetParentNodes()
         {
-            var parents = new HashSet<Node>();
-            var node = Parent;
+            HashSet<Node> parents = new HashSet<Node>();
+            Node node = Parent;
 
             while (node != null)
             {
@@ -72,8 +75,8 @@ namespace InformedSearch.Logic
         /// </summary>
         public int GetLevel()
         {
-            var level = 0;
-            var node = Parent;
+            int level = 0;
+            Node node = Parent;
 
             while (node != null)
             {
@@ -84,10 +87,10 @@ namespace InformedSearch.Logic
             return level;
         }
 
-        public string GetRenderedPathFromRoot()
+        public string PathFromRoot()
         {
-            var states = new HashSet<ProblemState> { State };
-            var node = Parent;
+            HashSet<ProblemState> states = new HashSet<ProblemState> { State };
+            Node node = Parent;
 
             while (node != null)
             {
@@ -96,11 +99,11 @@ namespace InformedSearch.Logic
             }
 
             states = states.Reverse().ToHashSet();
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            for (var i = 0; i < states.Count; i++)
+            for (int i = 0; i < states.Count; i++)
             {
-                var nextState = states.ElementAt(i);
+                ProblemState nextState = states.ElementAt(i);
                 sb.Append(nextState);
 
                 if (i + 1 != states.Count)
@@ -124,7 +127,7 @@ namespace InformedSearch.Logic
                 return true;
             }
 
-            var otherNode = (Node) obj;
+            Node otherNode = (Node) obj;
 
             return Equals(State, otherNode.State);
         }

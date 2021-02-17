@@ -26,11 +26,21 @@ namespace InformedSearch.Logic
         }
 
         /// <summary>
-        /// Returns a boolean value whether this problem has solution
+        /// Returns a boolean value whether this problem has a valid solution
         /// </summary>
         public bool IsSolvable()
         {
-            return _goalVolume <= Math.Max(_smallBucketCapacity, _bigBucketCapacity);
+            if (_smallBucketCapacity > _bigBucketCapacity)
+            {
+                return false;
+            }
+
+            if (_goalVolume > Math.Max(_smallBucketCapacity, _bigBucketCapacity))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

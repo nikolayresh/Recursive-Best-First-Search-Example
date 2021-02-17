@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InformedSearch.Logic
@@ -33,12 +34,15 @@ namespace InformedSearch.Logic
                 return null;
             }
 
-            var root = new Node(problem.GetInitialState());
-            var sr = Rbfs(problem, root, Infinity);
+            Node root = new Node(problem.GetInitialState());
+            SearchResult sr = Rbfs(problem, root, Infinity);
 
             return sr.GoalNode;
         }
 
+        /// <summary>
+        /// Implementation of the RBFS algorithm
+        /// </summary>
         private SearchResult Rbfs(Problem problem, Node node, double fLimit)
         {
             if (problem.IsGoalState(node.State))
@@ -46,35 +50,35 @@ namespace InformedSearch.Logic
                 return new SearchResult(node, fLimit);
             }
 
-            var successors = node.Expand();
-
-            if (successors.Count == 0)
+            HashSet<Node> successorNodes = node.Expand();
+            if (successorNodes.Count == 0)
             {
                 return new SearchResult(null, Infinity);
             }
 
-            var nodeF = EvaluateFValue(node);
-            var fList = new double[successors.Count];
+            double nodeF = EvaluateFValue(node);
+            double[] fList = new double[successorNodes.Count];
 
-            for (var i = 0; i < successors.Count; i++)
+            for (int i = 0; i < successorNodes.Count; i++)
             {
-                var nextSuccessor = successors.ElementAt(i);
+                Node nextSuccessor = successorNodes.ElementAt(i);
                 fList[i] = Math.Max(EvaluateFValue(nextSuccessor), nodeF);
             }
 
             while (true)
             {
-                var bestIndex = GetBestFValueIndex(fList);
-                var bestSuccessor = successors.ElementAt(bestIndex);
+                int bestIndex = GetBestFValueIndex(fList);
+                Node bestSuccessor = successorNodes.ElementAt(bestIndex);
 
                 if (fList[bestIndex] > fLimit)
                 {
                     return new SearchResult(null, fList[bestIndex]);
                 }
 
-                var altIndex = GetAltFValueIndex(fList, bestIndex);
-                var sr = Rbfs(problem, bestSuccessor, Math.Min(fLimit, fList[altIndex]));
+                int altIndex = GetAltFValueIndex(fList, bestIndex);
 
+                // RECURSIVE CALL
+                SearchResult sr = Rbfs(problem, bestSuccessor, Math.Min(fLimit, fList[altIndex]));
                 fList[bestIndex] = sr.FLimit;
 
                 if (sr.GoalNode != null)
@@ -84,6 +88,9 @@ namespace InformedSearch.Logic
             }
         }
 
+        /// <summary>
+        /// Calculates F-value component of a specified node
+        /// </summary>
         private double EvaluateFValue(Node node)
         {
             return node.GetLevel() + _heuristicFn.Evaluate(node);
@@ -91,8 +98,8 @@ namespace InformedSearch.Logic
 
         private static int GetBestFValueIndex(double[] fList)
         {
-            var index = 0;
-            var minValue = (double) Infinity;
+            int index = 0;
+            double minValue = Infinity;
 
             for (int i = 0; i < fList.Length; i++)
             {
@@ -108,12 +115,12 @@ namespace InformedSearch.Logic
 
         private static int GetAltFValueIndex(double[] fList, int bestIndex)
         {
-            var index = bestIndex;
-            var minValue = (double) Infinity;
+            int index = bestIndex;
+            double minValue = Infinity;
 
             for (int i = 0; i < fList.Length; i++)
             {
-                if (fList[i] < minValue && i != bestIndex)
+                if (i != bestIndex && fList[i] < minValue)
                 {
                     minValue = fList[i];
                     index = i;

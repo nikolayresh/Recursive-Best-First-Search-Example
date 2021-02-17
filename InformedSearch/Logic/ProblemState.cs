@@ -45,7 +45,7 @@
                 return true;
             }
 
-            var otherState = (ProblemState) obj;
+            ProblemState otherState = (ProblemState) obj;
 
             return
                 Equals(SmallBucket, otherState.SmallBucket) &&

@@ -40,7 +40,7 @@ namespace InformedSearch.Logic
         }
 
         /// <summary>
-        /// Fills up this bucket with water til capacity
+        /// Fills up this bucket with water until full capacity
         /// </summary>
         public void FillUp()
         {
@@ -48,9 +48,9 @@ namespace InformedSearch.Logic
         }
 
         /// <summary>
-        /// Clears water from this bucket
+        /// Dumps water from this bucket
         /// </summary>
-        public void DumpWater()
+        public void Dump()
         {
             _volume = 0;
         }
@@ -105,6 +105,9 @@ namespace InformedSearch.Logic
             }
         }
 
+        /// <summary>
+        /// Makes a clone of this bucket with same properties
+        /// </summary>
         public Bucket Clone()
         {
             return new Bucket(this);
@@ -122,11 +125,11 @@ namespace InformedSearch.Logic
                 return true;
             }
 
-            var otherBucket = (Bucket) obj;
+            Bucket otherBucket = (Bucket) obj;
 
             return
-                _volume == otherBucket._volume &&
-                _capacity == otherBucket._capacity;
+                _volume == otherBucket.GetVolume() &&
+                _capacity == otherBucket.GetCapacity();
         }
 
         public override int GetHashCode()

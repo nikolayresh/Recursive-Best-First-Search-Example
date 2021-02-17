@@ -1,5 +1,6 @@
 ﻿using System;
 using InformedSearch.Logic;
+using InformedSearch.Logic.HeuristicFunctions;
 
 namespace InformedSearch
 {
@@ -26,7 +27,7 @@ namespace InformedSearch
            {
                Console.WriteLine();
                Console.WriteLine($"Solution ({node.GetLevel()} steps):");
-               Console.WriteLine(node.GetRenderedPathFromRoot());
+               Console.WriteLine(node.PathFromRoot());
            } else
            {
                Console.WriteLine("Solution does not exist.");

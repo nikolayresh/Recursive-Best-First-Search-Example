@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InformedSearch.Logic
+namespace InformedSearch.Logic.HeuristicFunctions
 {
     public sealed class SimpleHeuristicFunction : IHeuristicFunction
     {
@@ -11,14 +11,14 @@ namespace InformedSearch.Logic
             _problem = problem ?? throw new ArgumentNullException(nameof(problem));
         }
 
-        public double Evaluate(Node node)
-        {
-            var sVolume = node.State.SmallBucket.GetVolume();
-            var bVolume = node.State.BigBucket.GetVolume();
-            var goalVolume = _problem.GetGoalVolume();
+        public int Evaluate(Node node)
+        { 
+            int volumeSmall = node.State.SmallBucket.GetVolume();
+            int volumeBig = node.State.BigBucket.GetVolume();
+            int volumeGoal = _problem.GetGoalVolume();
 
-            var result = 0;
-            if (sVolume != goalVolume && bVolume != goalVolume)
+            int result = 0;
+            if (volumeSmall != volumeGoal && volumeBig != volumeGoal)
             {
                 result++;
             }
